@@ -41,18 +41,28 @@ class Solution
 public:
     void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
     {
-        for (int i = m + n; i > 0; i++)
+        while (n > 0)
         {
-            cout<<"hi";
+            // cout << nums1[m + n - 1];
+            if (m > 0 && nums1[m - 1] >= nums2[n - 1])
+            {
+                nums1[m + n - 1] = nums1[m - 1];
+                m--;
+            }
+            else
+            {
+                nums1[m + n - 1] = nums2[n - 1];
+                n--;
+            }
         }
-        nums1 = {1, 2, 2, 3, 5, 6};
+        // nums1 = {1, 2, 2, 3, 5, 6};
     }
 };
 
 int main(void)
 {
-    int m = 3, n = 3;
-    vector<int> nums1 = {1, 2, 3, 0, 0, 0}, nums2 = {2, 5, 6};
+    int m = 0, n = 1;
+    vector<int> nums1 = {0}, nums2 = {1};
     Solution solution;
     solution.merge(nums1, m, nums2, n);
     for (auto x : nums1)
