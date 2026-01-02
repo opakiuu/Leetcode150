@@ -43,6 +43,7 @@ public:
     {
         for (int i = m + n; i > 0; i++)
         {
+            cout<<"hi";
         }
         nums1 = {1, 2, 2, 3, 5, 6};
     }
