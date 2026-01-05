@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 using namespace std;
 
 // 189. Rotate Array
@@ -32,14 +33,19 @@ class Solution
 public:
     void rotate(vector<int> &nums, int k)
     {
-        nums={1,2,3,4};
+        int n = nums.size();
+        k = k%n;
+        reverse(nums.begin(), nums.end());
+        reverse(nums.begin(), nums.begin() + k);
+        reverse(nums.begin() + k, nums.end());
+        cout<<5%2<<endl;
     }
 };
 
 int main(void)
 {
-    vector<int> nums = {3, 3, 4};
-    int k = 3;
+    vector<int> nums = {1, 2, 3, 4, 5, 6, 7};
+    int k = 12;
     Solution solution;
     solution.rotate(nums, k);
     for (auto x : nums)
