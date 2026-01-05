@@ -49,25 +49,19 @@ class Solution
 public:
     int removeDuplicates(vector<int> &nums)
     {
-        unordered_map<int, int> memo;
-        int k = 1;
-        memo[nums[0]] = 1;
-        for (int i = 1; i < nums.size(); i++)
+        //1, 1, 1, 2, 2, 3, 3, 3, 3
+        //0  1  2  3  4  5  6  7  8
+        if(nums.size()==1){
+            return 1;
+        }
+        int k = 2;
+        for (int i = 2; i < nums.size(); i++)
         {
-            if (memo[nums[i]] > 1)
+            if (nums[k-2] != nums[i])
             {
-                continue;
+                nums[k] = nums[i];
+                k++;
             }
-            if (memo.count(nums[i]))
-            {
-                memo[nums[i]] += 1;
-            }
-            else
-            {
-                memo[nums[i]] = 0;
-            }
-            nums[k] = nums[i];
-            k++;
         }
         for (int i = nums.size(); i > k; i--)
         {
@@ -79,7 +73,7 @@ public:
 
 int main(void)
 {
-    vector<int> nums = {1, 1, 1, 2, 2, 3};
+    vector<int> nums = {1, 1, 1, 2, 2, 3, 3, 3, 3};
     Solution solution;
     cout << solution.removeDuplicates(nums) << endl;
     for (auto x : nums)
