@@ -46,17 +46,33 @@ private:
         {
             return false;
         }
+
         // general
         int far = 0;
-
         for (int i = 0; i < nums[pos]; i++)
         {
-            // cout << i + nums[pos + i] << endl;
-            if (pos + i > nums.size() - 1 || pos + i + nums[pos + i] > nums.size() - 1)
+            int check_boundary = min(n - 1, pos + i);
+            if (check_boundary >= nums.size() - 1)
             {
                 return true;
             }
-            far = nums[pos + i] + i;
+            int cur_num = nums[pos + i] + i + pos;
+            check_boundary = min(n - 1, cur_num);
+            if (check_boundary >= nums.size() - 1)
+            {
+                return true;
+            }
+            // // cout << i + nums[pos + i] << endl;
+            // if (pos + i > nums.size() - 1 || pos + i + nums[pos + i] > nums.size() - 1)
+            // {
+            //     return true;
+            // }
+
+            if (nums[pos + i] + i > far && cur_num != 0)
+            {
+                far = nums[pos + i] + i;
+            }
+
             // cout << far << endl;
         }
         cout << far << endl;
