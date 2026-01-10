@@ -18,7 +18,7 @@ using namespace std;
 // Input: nums = [3,2,1,0,4]
 // Output: false
 // Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
-
+// 5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0
 class Solution
 {
 public:
@@ -49,41 +49,22 @@ private:
 
         // general
         int far = 0;
-        for (int i = 0; i < nums[pos]; i++)
+        for (int i = 1; i <= nums[pos]; i++)
         {
-            int check_boundary = min(n - 1, pos + i);
-            if (check_boundary >= nums.size() - 1)
+            //cout << "pos+nums[i]" << pos + i << endl;
+            if (dp(nums, pos + i))
             {
                 return true;
             }
-            int cur_num = nums[pos + i] + i + pos;
-            check_boundary = min(n - 1, cur_num);
-            if (check_boundary >= nums.size() - 1)
-            {
-                return true;
-            }
-            // // cout << i + nums[pos + i] << endl;
-            // if (pos + i > nums.size() - 1 || pos + i + nums[pos + i] > nums.size() - 1)
-            // {
-            //     return true;
-            // }
-
-            if (nums[pos + i] + i > far && cur_num != 0)
-            {
-                far = nums[pos + i] + i;
-            }
-
-            // cout << far << endl;
         }
-        cout << far << endl;
-        // cout << nums[pos + far] << endl;
-        return dp(nums, pos + far);
+        return false;
     }
 };
 
 int main(void)
 {
-    vector<int> nums = {5, 9, 3, 2, 1, 0, 2, 3, 3, 1, 0, 0};
+    vector<int> nums = {2,3,1,1,4};
     Solution solution;
     cout << solution.canJump(nums);
 }
+
