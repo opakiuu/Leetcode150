@@ -38,29 +38,24 @@ class Solution
 public:
     int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
     {
-        int total_gas = 0, total_cost = 0, start = 0;
+        int total = 0;
+        int tank = 0;
+        int start = 0;
+
         for (int i = 0; i < gas.size(); i++)
         {
-            //5, 1, 2, 3, 4 - > GAS
-            //4, 4, 1, 5, 1 - > COST
-            //diff = [1,-3,1,-2,3]
-            //[5,-3,-2,6,-3,-3]
-            // int diff = gas[i] - cost[i]; 
-            total_gas += gas[i];
-            total_cost += cost[i];
-            if (total_gas < total_cost)
+            int diff = gas[i] - cost[i];
+            total += diff;
+            tank += diff;
+
+            if (tank < 0)
             {
                 start = i + 1;
+                tank = 0;
             }
         }
-        if (total_gas < total_cost)
-        {
-            return -1;
-        }
-        else
-        {
-            return start;
-        }
+
+        return (total >= 0) ? start : -1;
     }
 };
 
