@@ -33,45 +33,94 @@ using namespace std;
 // Travel to station 1. Your tank = 3 - 3 + 3 = 3
 // You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
 // Therefore, you can't travel around the circuit once no matter where you start.
-class Solution
+
+// idx  0 1 2 3 4 5 6 7 8 9
+// gas  1 2 3 4 5 1 2 3 4 5
+// cost 3 4 5 1 2 3 4 5 1 2
+//            h
+//        t
+class object
 {
 public:
-    int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
+    virtual int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
     {
-        int total_gas = 0, total_cost = 0, start = 0;
-        for (int i = 0; i < gas.size(); i++)
+        return -1; // 或者丟出例外也行，但先讓它能編譯
+    }
+};
+
+class Solution : public object
+{
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) override
+    {
+        int total_gas = 0, t = 0, count = 0;
+        int size = gas.size();
+        for (int i = 0; i < size; i++)
         {
-            //5, 1, 2, 3, 4 - > GAS
-            //4, 4, 1, 5, 1 - > COST
-            //diff = [1,-3,1,-2,3]
-            //[5,-3,-2,6,-3,-3]
-            // int diff = gas[i] - cost[i]; 
-            total_gas += gas[i];
-            total_cost += cost[i];
-            if (total_gas < total_cost)
-            {
-                start = i + 1;
-            }
+            gas.push_back(gas[i]);
+            cost.push_back(cost[i]);
         }
-        if (total_gas < total_cost)
+        for (int h = 0; h < gas.size(); h++)
+        {
+            // cout << "this is t: " << t << endl;
+            if (count == size)
+            {
+                break;
+            }
+            total_gas += gas[h];
+            if (total_gas - cost[h] < 0)
+            {
+                t = h + 1;
+                total_gas = 0;
+                count = 0;
+                continue;
+            }
+            total_gas -= cost[h];
+            count++;
+        }
+        if (count < size || t >= gas.size())
         {
             return -1;
         }
-        else
+        if (t > size)
         {
-            return start;
+            t /= 2;
         }
+        return t;
+    }
+};
+
+class better : public object
+{
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) override
+    {
+        int total_gas = 0, t = 0, cur = 0;
+        int size = gas.size();
+        for (int h = 0; h < gas.size(); h++)
+        {
+            // cout << "this is t: " << t << endl;
+            int diff = gas[h] - cost[h];
+            total_gas += diff;
+            cur += diff;
+            if (cur < 0)
+            {
+                t = h + 1;
+                cur = 0;
+                continue;
+            }
+        }
+        return total_gas < 0 ? -1 : t;
     }
 };
 
 int main(void)
 {
-    vector<int> gas = {5, 1, 2, 3, 4};
-    vector<int> cost = {4, 4, 1, 5, 1};
-    //diff = [1,-3,1,-2,3]
-
-    // 4 5 1 2 3 4
-    // 4 8 7 6 5 0
-    Solution solution;
-    cout << solution.canCompleteCircuit(gas, cost);
+    vector<int> gas = {1, 2, 3, 4, 5};
+    vector<int> cost = {3, 4, 5, 1, 2};
+    // 2 3 4 2 3 4
+    // 3 4 3 3 4 3
+    object *p = new better();
+    cout << p->canCompleteCircuit(gas, cost);
+    delete p;
 }
