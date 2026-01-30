@@ -25,6 +25,11 @@
 # Explanation: The only possible triplet sums up to 0.
 
 
+class object:
+    def threeSum(self):
+        raise NotImplementedError("no implementation in base class")
+
+
 class Solution(object):
     def threeSum(self, nums):
         """
@@ -57,10 +62,40 @@ class Solution(object):
         return result
 
 
-nums = [2, -3, 0, -2, -5, -5, -4, 1, 2, -2, 2, 0, 2, -4, 5, 5, -10]
+class practice(object):
+    def threeSum(self, nums):
+        nums = sorted(nums)
+        print("%s => " % str(nums))
+        res = []
+        for a in range(len(nums) - 1):
+            if a > 0 and nums[a] == nums[a - 1]:
+                continue
+            b, c = a + 1, len(nums) - 1
+            while b < c:
+                if nums[a] + nums[b] + nums[c] > 0:
+                    c -= 1
+                    while nums[c + 1] == nums[c] and b < c:
+                        c -= 1
+                elif nums[a] + nums[b] + nums[c] == 0:
+                    res += [[nums[a], nums[b], nums[c]]]
+                    b += 1
+                    c -= 1
+                    while nums[b - 1] == nums[b] and b < c:
+                        b += 1
+                    while nums[c + 1] == nums[c] and b < c:
+                        c -= 1
+                else:
+                    b += 1
+                    while nums[b - 1] == nums[b] and b < c:
+                        b += 1
 
+        return res
+
+
+nums = [2,-3,0,-2,-5,-5,-4,1,2,-2,2,0,2,-4,5,5,-10]
 # -1 -1 0 1
-sol = Solution()
-print("%s => " % str(nums))
+Solutions = [Solution(), practice()]
+sol = Solutions[1]
+# print("%s => " % str(nums))
 for i in sol.threeSum(nums):
     print("%s" % i)
