@@ -5,51 +5,54 @@ class Solution(object):
         :type maxWidth: int
         :rtype: List[str]
         """
-        word_total = 0
-        prompt = []
+        len_total = 0
         ans = []
-        space = 0
-        Left_more = 0
-        Left_more_bool = True
-        for i in range(-1, len(words) - 1, 1):
-            space += 1
-            word_total += len(words[i + 1])
-            if i!=-1:
-                prompt .append(words[i])
-            Left_more_bool = False
-            if (word_total + space) < maxWidth:
-                continue
+        index = 0
+        for w in range(0, len(words), 1):
+            part = []
+            if len_total + len(words[w]) + (w - index) - 1 < maxWidth:
+                len_total += len(words[w])
             else:
-                if (word_total + space) == maxWidth:
-                    space -= 1
-                    prompt.clear(words[i])
-                if space != 0:
-                    Left_more += (maxWidth - word_total) % space
-                    space = int((maxWidth - word_total) / space)
-                for a in prompt:
-                    ans += [a]
-                    if Left_more_bool:
-                        # while Left_more > 0:
-                        #     ans += [" "]
-                        #     Left_more -= 1
-                        # Left_more_bool = False
-                        ans.append(" "*Left_more)
-                        Left_more_bool = False
-                    # for i in range(0, space, 1):
-                    #     ans += [" "]
-                    ans.append(" "*space)
-            prompt.clear()
-            space = 0
-            Left_more = 0
-            Left_more_bool = True
-            word_total = 0
-        ans+=[words[-1]]
-        # return ["This    is    an", "example  of text", "justification.  "]
+                if w - index - 1 > 0:
+                    gap = (maxWidth - len_total) // (w - index - 1)
+                    extra = (maxWidth - len_total) % (w - index - 1)
+                    for k in range(index, w - 1, 1):
+                        part.append("".join(words[k]))
+                        part.append(" " * (gap + (1 if k - index < extra else 0)))
+                    part.append("".join(words[w - 1]))
+                else:
+                    part.append("".join(words[index:w]))
+                    part.append(" " * (maxWidth - len_total))
+
+                ans.append("".join(part))
+                index = w
+                len_total = len(words[w])
+        ans.append(" ".join(words[index:]))
+        ans[-1] += " " * (maxWidth - (len(ans[-1])))
         return ans
 
 
-words = ["This", "is", "an", "example", "of", "text", "justification."]
-maxWidth = 16
+words = [
+    "Science",
+    "is",
+    "what",
+    "we",
+    "understand",
+    "well",
+    "enough",
+    "to",
+    "explain",
+    "to",
+    "a",
+    "computer.",
+    "Art",
+    "is",
+    "everything",
+    "else",
+    "we",
+    "do",
+]
+maxWidth = 20
 sol = Solution()
 print("%s => " % (words))
 for i in sol.fullJustify(words, maxWidth):
